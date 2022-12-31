@@ -2,6 +2,7 @@ import discord
 import os
 from dotenv import load_dotenv
 from discord.ext import commands
+from io import BytesIO
 
 from meme import *
 
@@ -33,9 +34,11 @@ async def on_message(message):
 async def meme(ctx, memeName : str, text : str):
     print("Image request received for " + memeName + " with text " + text)
     """Creates Image"""
-    create_meme(memeName, text)
-    await ctx.send(file=discord.File(get_meme_path("temp")))
-    delete_meme()
+    img = create_meme(memeName, text)
+    with BytesIO() as image_binary:
+        img.save(image_binary, 'JPEG')
+        image_binary.seek(0)
+        await ctx.send(file=discord.File(fp=image_binary, filename=memeName+".jpeg"))
 
 @bot.command()
 async def mehdi(ctx):

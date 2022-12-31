@@ -20,7 +20,7 @@ def create_meme(memeName, text):
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(fontfile, fontBase)
     write_meme(text, img, draw)
-    img.save(get_meme_path("temp"))
+    return img
 
 def write_meme(text, img, draw):
     font = ImageFont.truetype(fontfile, fontBase)
@@ -40,9 +40,6 @@ def open_meme(memeName):
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     return img.resize((basewidth, hsize))
-
-def delete_meme():
-    os.remove(get_meme_path("temp"))
-
+    
 def get_meme_path(memeName):
     return os.path.join(memes_dir, memeName + ".jpeg")
