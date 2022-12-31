@@ -29,7 +29,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.command()
-async def caption(ctx, memeName : str, text : str):
+async def caption(ctx, memeName : str, *, text : str):
     """Captions a meme: !meme <memeName> <text>"""
     print("Image request received for " + memeName + " with text " + text)
     img = create_meme(memeName, text)
