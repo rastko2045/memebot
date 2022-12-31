@@ -17,6 +17,7 @@ memes_dir = os.getenv('MEME_DIR')
 
 def create_meme(memeName, text):
     img = open_meme(memeName)
+    img = img.convert("RGB")
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(fontfile, fontBase)
     write_meme(text, img, draw)
@@ -27,7 +28,7 @@ def write_meme(text, img, draw):
     textLines = textwrap.wrap(text, width = 20)
     textLines.reverse()
     iw, ih = img.size
-    y = ih-(ih/10)-lineSpacing
+    y = ih-(ih/10)-font.getsize(textLines[0])[1]
     for line in textLines:
         x = (iw - font.getsize(line)[0]) / 2
         print("Printing line: " + line + " at coordinates: " + str((x, y)))
@@ -40,6 +41,14 @@ def open_meme(memeName):
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     return img.resize((basewidth, hsize))
-    
+
+def delete_meme(memeName):
+    os.remove(get_meme_path(memeName))
+
+def getMemes():
+    meme_names = os.listdir(memes_dir)
+    meme_names = [m.split(".")[0] for m in meme_names]
+    return "\n".join(meme_names)
+
 def get_meme_path(memeName):
     return os.path.join(memes_dir, memeName + ".jpeg")
