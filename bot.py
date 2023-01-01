@@ -30,10 +30,27 @@ async def on_message(message):
 
 @bot.command()
 async def caption(ctx, memeName : str, *, text : str):
-    """Captions a meme: !meme <memeName> <text>"""
+    """Captions a meme: !caption <memeName> <text>"""
     print("Image request received for " + memeName + " with text " + text)
     try:
         img = create_meme(memeName, text)
+    except FileNotFoundError:
+        await ctx.send("Meme " + memeName + " does not exist. For a list of available memes use !list.")
+    except:
+        await ctx.send("Something went wrong. Please report this.")
+        print(getMemes())
+    else:
+        with BytesIO() as image_binary:
+            img.save(image_binary, 'JPEG')
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename=memeName+".jpeg"))
+
+@bot.command()
+async def meme(ctx, memeName : str):
+    """Shows a meme format: !meme <memeName>"""
+    print("Image request received for " + memeName)
+    try:
+        img = open_meme(memeName)
     except FileNotFoundError:
         await ctx.send("Meme " + memeName + " does not exist. For a list of available memes use !list.")
     except:

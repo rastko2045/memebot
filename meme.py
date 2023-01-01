@@ -17,7 +17,6 @@ memes_dir = os.getenv('MEME_DIR')
 
 def create_meme(memeName, text):
     img = open_meme(memeName)
-    img = img.convert("RGB")
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(fontfile, fontBase)
     write_meme(text, img, draw)
@@ -38,6 +37,7 @@ def write_meme(text, img, draw):
 
 def open_meme(memeName):
     img = Image.open(get_meme_path(memeName))
+    img = img.convert("RGB")
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     return img.resize((basewidth, hsize))
