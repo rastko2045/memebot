@@ -9,7 +9,7 @@ letSpacing = 9              #Space between letters
 fill = (255, 255, 255)      #TextColor
 stroke_fill = (0,0,0)       #Color of the text outline
 lineSpacing = 10            #Space between lines
-stroke_width=9              #How thick the outline of the text is
+stroke_width = 9            #How thick the outline of the text is
 fontfile = "./fonts/impact.ttf"
 
 load_dotenv()
