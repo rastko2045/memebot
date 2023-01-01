@@ -72,6 +72,8 @@ async def save(ctx, memeName : str):
         await ctx.send("Too many images attached. Use !help to see how to use this command.")
     elif(not ctx.message.attachments[0].content_type.startswith("image")):
         await ctx.send("Invalid attachment. Use !help to see how to use this command.")
+    elif(ctx.message.attachments[0].size > 8388608):
+        await ctx.send("Image size too big. Maximum size is 8MB.")
     else: 
         await ctx.message.attachments[0].save(get_meme_path(memeName))
         await ctx.send("Meme " + memeName + " saved successfully.")
