@@ -22,15 +22,17 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
-
     if "medhi" in message.content.lower():
         print("Medhi detected: (╯°□°）╯︵ ┻━┻!")
         await message.channel.send('(╯°□°）╯︵ ┻━┻')
     await bot.process_commands(message)
 
 @bot.command()
-async def caption(ctx, memeName : str, *, text : str):
+async def caption(ctx, memeName : str = None, *, text : str = None):
     """Captions a meme: !caption <memeName> <text>"""
+    if memeName is None or text is None:
+        await ctx.send("Correct usage: !caption <memeName> <text>. For a list of available memes use !list.")
+        return
     print("Image request received for " + memeName + " with text " + text)
     try:
         img = create_meme(memeName, text)
@@ -48,8 +50,11 @@ async def caption(ctx, memeName : str, *, text : str):
             await ctx.send(file=discord.File(fp=image_binary, filename=memeName+".jpeg"))
 
 @bot.command()
-async def meme(ctx, memeName : str):
+async def meme(ctx, memeName : str = None):
     """Shows a meme format: !meme <memeName>"""
+    if memeName is None:
+        await ctx.send("Correct usage: !meme <memeName>. For a list of available memes use !list.")
+        return
     print("Image request received for " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
     try:
         img = open_meme(memeName)
@@ -67,8 +72,11 @@ async def meme(ctx, memeName : str):
             await ctx.send(file=discord.File(fp=image_binary, filename=memeName+".jpeg"))
 
 @bot.command()
-async def save(ctx, memeName : str):
+async def save(ctx, memeName : str = None):
     """Saves a new meme: !save <memeName>. Message must contain an image attachment"""
+    if memeName is None:
+        await ctx.send("Correct usage: !save <memeName>.")
+        return
     print("New meme request: " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
     if(len(ctx.message.attachments) == 0):
         await ctx.send("No image attached. Use !help to see how to use this command.")
@@ -78,14 +86,23 @@ async def save(ctx, memeName : str):
         await ctx.send("Invalid attachment. Use !help to see how to use this command.")
     elif(ctx.message.attachments[0].size > 8388608):
         await ctx.send("Image size too big. Maximum size is 8MB.")
-    else: 
-        print("Saving meme " + memeName)
-        await ctx.message.attachments[0].save(get_meme_path(memeName))
-        await ctx.send("Meme " + memeName + " saved successfully.")
+    else:
+        try: 
+            print("Saving meme " + memeName)
+            await ctx.message.attachments[0].save(get_meme_path(memeName))
+            await ctx.send("Meme " + memeName + " saved successfully.")
+        except ValueError:
+            await ctx.send("There are no path traversal attacks here. Please stop trying to break me.")
+        except:
+            await ctx.send("Something went wrong. Please report this.")
+        
 
 @bot.command()
-async def delete(ctx, memeName : str):
+async def delete(ctx, memeName : str = None):
     """Deletes a saved meme: !delete <memeName>"""
+    if memeName is None:
+        await ctx.send("Correct usage: !delete <memeName>. For a list of available memes use !list.")
+        return
     print("Delete meme request: " + memeName)
     try:
         delete_meme(memeName)
