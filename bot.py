@@ -36,6 +36,8 @@ async def caption(ctx, memeName : str, *, text : str):
         img = create_meme(memeName, text)
     except FileNotFoundError:
         await ctx.send("Meme " + memeName + " does not exist. For a list of available memes use !list.")
+    except ValueError:
+        await ctx.send("There are no path traversal attacks here. Please stop trying to break me.")
     except:
         await ctx.send("Something went wrong. Please report this.")
         print(getMemes())
@@ -48,11 +50,13 @@ async def caption(ctx, memeName : str, *, text : str):
 @bot.command()
 async def meme(ctx, memeName : str):
     """Shows a meme format: !meme <memeName>"""
-    print("Image request received for " + memeName)
+    print("Image request received for " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
     try:
         img = open_meme(memeName)
     except FileNotFoundError:
         await ctx.send("Meme " + memeName + " does not exist. For a list of available memes use !list.")
+    except ValueError:
+        await ctx.send("There are no path traversal attacks here. Please stop trying to break me.")
     except:
         await ctx.send("Something went wrong. Please report this.")
         print(getMemes())
@@ -65,7 +69,7 @@ async def meme(ctx, memeName : str):
 @bot.command()
 async def save(ctx, memeName : str):
     """Saves a new meme: !save <memeName>. Message must contain an image attachment"""
-    print("New meme request: " + memeName)
+    print("New meme request: " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
     if(len(ctx.message.attachments) == 0):
         await ctx.send("No image attached. Use !help to see how to use this command.")
     elif(len(ctx.message.attachments) > 1):
@@ -75,6 +79,7 @@ async def save(ctx, memeName : str):
     elif(ctx.message.attachments[0].size > 8388608):
         await ctx.send("Image size too big. Maximum size is 8MB.")
     else: 
+        print("Saving meme " + memeName)
         await ctx.message.attachments[0].save(get_meme_path(memeName))
         await ctx.send("Meme " + memeName + " saved successfully.")
 
@@ -84,6 +89,8 @@ async def delete(ctx, memeName : str):
     print("Delete meme request: " + memeName)
     try:
         delete_meme(memeName)
+    except ValueError:
+        await ctx.send("There are no path traversal attacks here. Please stop trying to break me.")
     except:
         await ctx.send("Meme " + memeName + " does not exist. For a list of available memes use !list.")
     else:

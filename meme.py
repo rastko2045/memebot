@@ -36,14 +36,24 @@ def write_meme(text, img, draw):
     return img
 
 def open_meme(memeName):
-    img = Image.open(get_meme_path(memeName))
+    path = get_meme_path(memeName)
+    print(path)
+    if os.path.commonprefix((os.path.realpath(path),memes_dir)) != memes_dir: 
+        raise ValueError("Invalid path!")
+    img = Image.open(path)
     img = img.convert("RGB")
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     return img.resize((basewidth, hsize))
 
 def delete_meme(memeName):
-    os.remove(get_meme_path(memeName))
+    path = get_meme_path(memeName)
+    print(path)
+    #make sure path is in memes_dir
+    if os.path.commonprefix((os.path.realpath(path),memes_dir)) != memes_dir: 
+        raise ValueError("Invalid path!")
+    else:
+        os.remove(path)
 
 def getMemes():
     meme_names = os.listdir(memes_dir)
