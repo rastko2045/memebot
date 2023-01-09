@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 basewidth = 1200            #Width to make the meme
 fontBase = 100              #Font size
-letSpacing = 9              #Space between letters
 fill = (255, 255, 255)      #TextColor
 stroke_fill = (0,0,0)       #Color of the text outline
 lineSpacing = 10            #Space between lines
@@ -13,7 +12,7 @@ stroke_width = 9            #How thick the outline of the text is
 fontfile = "./fonts/impact.ttf"
 
 load_dotenv()
-memes_dir = os.getenv('MEME_DIR')
+MEMES_DIR = os.getenv('MEME_DIR')
 
 def create_meme(memeName, text):
     img = open_meme(memeName)
@@ -46,14 +45,14 @@ def delete_meme(memeName):
     os.remove(get_meme_path(memeName))
 
 def getMemes():
-    meme_names = os.listdir(memes_dir)
+    meme_names = os.listdir(MEMES_DIR)
     meme_names = [m.split(".jpeg")[0] for m in meme_names]
     return "\n".join(meme_names)
 
 def get_meme_path(memeName):
-    path = os.path.join(memes_dir, memeName + ".jpeg")
+    path = os.path.join(MEMES_DIR, memeName + ".jpeg")
     print(path)
-    if os.path.commonprefix((os.path.realpath(path),memes_dir)) != memes_dir: 
+    if os.path.commonprefix((os.path.realpath(path),MEMES_DIR)) != MEMES_DIR: 
         raise ValueError("Invalid path!")
     else: 
-        return os.path.join(memes_dir, memeName + ".jpeg")
+        return path

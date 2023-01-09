@@ -33,7 +33,7 @@ async def caption(ctx, memeName : str = None, *, text : str = None):
     if memeName is None or text is None:
         await ctx.send("Correct usage: !caption <memeName> <text>. For a list of available memes use !list.")
         return
-    print("Image request received for " + memeName + " with text " + text)
+    print("Image request received for " + memeName + " with text " + text + ". From server " + ctx.guild.name + " by " + ctx.author.name + " in channel " + ctx.channel.name)
     try:
         img = create_meme(memeName, text)
     except FileNotFoundError:
@@ -55,7 +55,7 @@ async def meme(ctx, memeName : str = None):
     if memeName is None:
         await ctx.send("Correct usage: !meme <memeName>. For a list of available memes use !list.")
         return
-    print("Image request received for " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
+    print("Image request received for " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name + " in channel " + ctx.channel.name)
     try:
         img = open_meme(memeName)
     except FileNotFoundError:
@@ -77,7 +77,7 @@ async def save(ctx, memeName : str = None):
     if memeName is None:
         await ctx.send("Correct usage: !save <memeName>.")
         return
-    print("New meme request: " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name)
+    print("New meme request: " + memeName + ". From server " + ctx.guild.name + " by " + ctx.author.name + " in channel " + ctx.channel.name)
     if(len(ctx.message.attachments) == 0):
         await ctx.send("No image attached. Use !help to see how to use this command.")
     elif(len(ctx.message.attachments) > 1):
